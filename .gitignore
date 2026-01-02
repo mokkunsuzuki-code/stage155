@@ -1,0 +1,17 @@
+# MIT License © 2025 Motohiro Suzuki
+
+__pycache__/
+*.pyc
+.DS_Store
+
+# venv
+.venv/
+venv/
+
+# logs
+*.log
+
+# secrets / generated binaries (DO NOT COMMIT)
+*.bin
+*_sk.*
+*_secret.*

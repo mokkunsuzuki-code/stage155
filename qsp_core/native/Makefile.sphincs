@@ -1,0 +1,51 @@
+# MIT License © 2025 Motohiro Suzuki
+#
+# Build: libqsp_sphincs_wrapper.dylib (PQClean SPHINCS+)
+
+CC      := clang
+OUT     := libqsp_sphincs_wrapper.dylib
+WRAP    := sphincs_wrapper.c
+
+# You set:
+# export SPHINCS_PQCLEAN_DIR="$PWD/PQClean/crypto_sign/sphincs-shake-256s-simple"
+SPHINCS_PQCLEAN_DIR ?= $(PWD)/PQClean/crypto_sign/sphincs-shake-256s-simple
+
+# force "clean" dir (PQClean layout)
+SPHINCS_IMPL_DIR := $(SPHINCS_PQCLEAN_DIR)/clean
+PQCLEAN_COMMON_DIR := $(PWD)/PQClean/common
+
+# sanity
+ifeq ("$(wildcard $(SPHINCS_IMPL_DIR)/api.h)","")
+  $(error api.h not found: $(SPHINCS_IMPL_DIR)/api.h  (check SPHINCS_PQCLEAN_DIR))
+endif
+ifeq ("$(wildcard $(PQCLEAN_COMMON_DIR)/randombytes.c)","")
+  $(error PQClean/common not found: $(PQCLEAN_COMMON_DIR)  (did you git clone PQClean into qsp_core/native/PQClean?))
+endif
+
+CFLAGS  := -O2 -fPIC -Wall -Wextra -std=c11 \
+           -I"$(SPHINCS_IMPL_DIR)" \
+           -I"$(PQCLEAN_COMMON_DIR)"
+
+LDFLAGS := -dynamiclib
+
+# impl sources
+SPHINCS_SRCS := $(wildcard $(SPHINCS_IMPL_DIR)/*.c)
+
+# ✅ include ALL common sources to satisfy randombytes + fips202/sha etc.
+COMMON_SRCS  := $(wildcard $(PQCLEAN_COMMON_DIR)/*.c)
+
+SRCS := $(WRAP) $(SPHINCS_SRCS) $(COMMON_SRCS)
+OBJS := $(SRCS:.c=.o)
+
+all: $(OUT)
+
+$(OUT): $(OBJS)
+	@echo "[SPHINCS] impl=$(SPHINCS_IMPL_DIR)"
+	@echo "[SPHINCS] common=$(PQCLEAN_COMMON_DIR)"
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f $(OUT) $(OBJS)

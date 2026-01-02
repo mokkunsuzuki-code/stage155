@@ -1,0 +1,13 @@
+# MIT License © 2025 Motohiro Suzuki
+from __future__ import annotations
+
+import logging
+import sys
+
+
+def setup_logging() -> None:
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+        stream=sys.stdout,
+    )

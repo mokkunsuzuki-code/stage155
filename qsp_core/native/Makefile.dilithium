@@ -1,0 +1,36 @@
+# MIT License © 2025 Motohiro Suzuki
+# Stage144: Dilithium (ML-DSA-65) wrapper build
+
+CC = clang
+CFLAGS = -O2 -fPIC -Wall -Wextra -std=c11
+
+# PQClean ML-DSA-65 paths
+PQCLEAN_DIR = PQClean/crypto_sign/ml-dsa-65/clean
+COMMON_DIR  = PQClean/common
+
+INCLUDES = \
+	-I$(PQCLEAN_DIR) \
+	-I$(COMMON_DIR)
+
+SOURCES = \
+	dilithium_wrapper.c \
+	$(PQCLEAN_DIR)/sign.c \
+	$(PQCLEAN_DIR)/packing.c \
+	$(PQCLEAN_DIR)/poly.c \
+	$(PQCLEAN_DIR)/polyvec.c \
+	$(PQCLEAN_DIR)/ntt.c \
+	$(PQCLEAN_DIR)/reduce.c \
+	$(PQCLEAN_DIR)/rounding.c \
+	$(PQCLEAN_DIR)/symmetric-shake.c \
+	$(COMMON_DIR)/fips202.c \
+	$(COMMON_DIR)/randombytes.c
+
+TARGET = libqsp_dilithium_wrapper.dylib
+
+all: $(TARGET)
+
+$(TARGET):
+	$(CC) $(CFLAGS) $(INCLUDES) -dynamiclib -o $@ $(SOURCES)
+
+clean:
+	rm -f $(TARGET)
