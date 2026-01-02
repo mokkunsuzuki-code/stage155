@@ -12,6 +12,9 @@ QSP (Quantum-Safe Protocol) is a research-grade protocol skeleton integrating:
 > This repository is a **research prototype**.  
 > It is **NOT** a production-ready secure protocol and **NOT** a security proof.
 
+- Architecture: [ARCHITECTURE_155.md](./ARCHITECTURE_155.md)
+
+
 ---
 
 ## What you can do in 30 seconds
