@@ -1,4 +1,4 @@
-# MIT License © 2025 Motohiro Suzuki（鈴木　基弘）
+# MIT License © 2025 Motohiro Suzuki　＜鈴木　基弘＞
 # README.md
 # Stage155｜QSP v1.0 (Research Grade) Release Candidate
 
